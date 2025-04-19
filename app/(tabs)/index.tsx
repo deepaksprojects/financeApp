@@ -6,6 +6,7 @@ import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import AccountListItem from "@/components/AccountListItem";
 import AccountList from "@/components/AccountList";
+import AddNewAccount from "@/components/AddNewAccount";
 
 const ACCOUNT_HEADER = [
   {
@@ -31,6 +32,7 @@ export default function HomeScreen() {
         ))}
       </View>
       <AccountList />
+      <AddNewAccount />
     </View>
   );
 }
