@@ -1,17 +1,32 @@
 import { View, Text, TextInput, StyleSheet, Button } from "react-native";
 import React, { Fragment, useState } from "react";
+import { store$ } from "@/utils";
+import { use$ } from "@legendapp/state/react";
 
 const AddNewAccount = () => {
   const [name, setName] = useState("");
   const [CAP, setCAP] = useState("");
   const [TAP, setTAP] = useState("");
+
   const CREATE_ACCOUNT_FIELDS = [
     { id: 1, placeHolder: "Name", value: name, onChange: setName },
     { id: 2, placeHolder: "CAP%", value: CAP, onChange: setCAP },
     { id: 3, placeHolder: "TAP%", value: TAP, onChange: setTAP },
   ];
   function createAccount() {
-    console.log("Account is created with", name);
+    store$.addAllocation({
+      id: `${name}-${CAP}-${TAP}`,
+      name: name,
+      CAP: CAP,
+      TAP: TAP,
+    });
+    setName("");
+    setCAP("");
+    setTAP("");
+  }
+
+  function clearAll() {
+    store$.allocations.set([]);
   }
 
   return (
@@ -21,13 +36,14 @@ const AddNewAccount = () => {
           <TextInput
             key={id}
             placeholder={placeHolder}
-            onChangeText={setName}
+            onChangeText={onChange}
             style={styles.input}
             value={value}
           />
         ))}
       </View>
       <Button title="Add Button" onPress={createAccount} />
+      <Button title="Clear ALL" onPress={clearAll} />
     </Fragment>
   );
 };
