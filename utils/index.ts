@@ -1,2 +1,2 @@
-import store$ from "./configureLegendState";
-export { store$ };
+import {addAllocation,allocations$} from "./configureLegendState";
+export { addAllocation,allocations$ };

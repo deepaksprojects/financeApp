@@ -5,6 +5,9 @@ import { $React } from "@legendapp/state/react-web";
 import { $TextInput } from "@legendapp/state/react-native";
 import { observablePersistAsyncStorage } from "@legendapp/state/persist-plugins/async-storage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { syncedSupabase } from "@legendapp/state/sync-plugins/supabase";
+import { generateId, supabase } from "./supaLegend";
+
 interface Allocation {
   id: string | number;
   name: string;
@@ -24,40 +27,48 @@ interface AllocationItemProps {
 }
 
 // Setup a configured persist options
-const ConfigureLegendState = configureSynced(synced, {
+const ConfigureLegendState = configureSynced(syncedSupabase, {
   persist: {
     plugin: observablePersistAsyncStorage({
       AsyncStorage,
     }),
   },
+  generateId,
+  supabase,
+  changesSince: "last-sync",
+  fieldCreatedAt: "created_at",
+  fieldUpdatedAt: "updated_at",
+  // Optionally enable soft deletes
+  fieldDeleted: "deleted",
 });
 
-const store$ = observable<Store>({
-  allocations: ConfigureLegendState({
-    initial: [],
+export const allocations$ = observable(
+  ConfigureLegendState({
+    supabase,
+    collection: "allocations",
+    select: (from) =>
+      from.select("id,counter,name,cap,tap,created_at,updated_at,deleted"),
+    actions: ["read", "create", "update", "delete"],
+    realtime: true,
     persist: {
-      name: "user-allocations",
+      name: "allocations",
+      retrySync: true, // Persist pending changes and retry
     },
-  }),
-  // Computeds
-  total: (): number => {
-    return store$.allocations.length;
-  },
-  addAllocation: ({ id = "", CAP = "", TAP = "", name = "" }: Allocation) => {
-    const allocation: Allocation = {
-      id: id,
-      name: name,
-      CAP: CAP,
-      TAP: TAP,
-    };
-    const itemIndex = store$.allocations
-      .get()
-      .findIndex((item) => item.name == name);
-    if (itemIndex !== -1) {
-      store$.allocations[itemIndex].set(() => allocation);
-    } else {
-      store$.allocations.set((prev) => [...prev, allocation]);
-    }
-  },
-});
-export default store$;
+    retry: {
+      infinite: true, // Retry changes with exponential backoff
+    },
+  })
+);
+
+
+
+export function addAllocation(name:string,cap:string,tap:string) {
+  const id = generateId()
+ // Add keyed by id to the todos$ observable to trigger a create in Supabase
+  allocations$[id].assign({
+    id,
+    name,
+    cap,
+    tap
+  })
+}

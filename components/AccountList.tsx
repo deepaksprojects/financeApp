@@ -2,18 +2,18 @@ import { View, Text, FlatList, StyleSheet } from "react-native";
 import React, { useCallback } from "react";
 import AccountListItem from "./AccountListItem";
 import { use$ } from "@legendapp/state/react";
-import { store$ } from "@/utils";
+import { allocations$ } from "@/utils";
 
 const AccountList = () => {
-  const allocations = use$(store$.allocations);
+  const allocations = use$(allocations$);
   const renderItem = useCallback(({ item }: any) => {
     return (
-      <AccountListItem name={item?.name} CAP={item?.CAP} TAP={item?.TAP} />
+      <AccountListItem name={item?.name} CAP={item?.cap} TAP={item?.tap} />
     );
   }, []);
   return (
     <FlatList
-      data={allocations}
+      data={Object.values(allocations)}
       keyExtractor={(item) => item.id.toString()}
       contentContainerStyle={styles.content}
       renderItem={renderItem}

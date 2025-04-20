@@ -1,6 +1,6 @@
 import { View, Text, TextInput, StyleSheet, Button } from "react-native";
 import React, { Fragment, useState } from "react";
-import { store$ } from "@/utils";
+import { addAllocation } from "@/utils";
 import { use$ } from "@legendapp/state/react";
 
 const AddNewAccount = () => {
@@ -14,20 +14,13 @@ const AddNewAccount = () => {
     { id: 3, placeHolder: "TAP%", value: TAP, onChange: setTAP },
   ];
   function createAccount() {
-    store$.addAllocation({
-      id: `${name}-${CAP}-${TAP}`,
-      name: name,
-      CAP: CAP,
-      TAP: TAP,
-    });
+    addAllocation(name, CAP, TAP);
     setName("");
     setCAP("");
     setTAP("");
   }
 
-  function clearAll() {
-    store$.allocations.set([]);
-  }
+  function clearAll() {}
 
   return (
     <Fragment>
