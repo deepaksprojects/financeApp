@@ -1,6 +1,6 @@
 import { View, Text, TextInput, StyleSheet, Button } from "react-native";
 import React, { Fragment, useState } from "react";
-import { addAllocation } from "@/utils";
+import { addAllocation } from "@/src/utils";
 import { use$ } from "@legendapp/state/react";
 
 const AddNewAccount = () => {

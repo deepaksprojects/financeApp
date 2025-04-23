@@ -2,7 +2,7 @@ import { View, Text, FlatList, StyleSheet } from "react-native";
 import React, { useCallback } from "react";
 import AccountListItem from "./AccountListItem";
 import { use$ } from "@legendapp/state/react";
-import { allocations$ } from "@/utils";
+import { allocations$ } from "@/src/utils";
 
 const AccountList = () => {
   const allocations = use$(allocations$);
@@ -13,7 +13,7 @@ const AccountList = () => {
   }, []);
   return (
     <FlatList
-      data={Object.values(allocations)}
+      data={Object.values(allocations ?? {})}
       keyExtractor={(item) => item.id.toString()}
       contentContainerStyle={styles.content}
       renderItem={renderItem}

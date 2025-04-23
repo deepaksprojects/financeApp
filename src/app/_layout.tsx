@@ -1,3 +1,5 @@
+// Import the global.css file in the index.js file:
+import "../global.css";
 import {
   DarkTheme,
   DefaultTheme,
@@ -10,8 +12,8 @@ import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import "react-native-reanimated";
 
-import { useColorScheme } from "@/hooks/useColorScheme";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { useColorScheme } from "../hooks/useColorScheme.web";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
