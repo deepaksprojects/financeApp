@@ -5,7 +5,7 @@ import { Link } from "expo-router";
 const NoGroups = () => {
   return (
     <View className="flex-1 items-center justify-center">
-      <Link asChild href={"/(tabs)/addExpense"}>
+      <Link asChild href={"/addGroup"}>
         <Text>Start a new group</Text>
       </Link>
     </View>
