@@ -14,6 +14,7 @@ const styles = StyleSheet.create({
     gap: 10,
     paddingHorizontal: 10,
     marginTop: 5,
+    flex: 1,
   },
   header: {
     flexDirection: "row",
